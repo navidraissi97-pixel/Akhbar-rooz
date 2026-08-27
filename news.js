@@ -24,7 +24,9 @@ async function loadNews() {
 
       article.innerHTML = 
         <span class="tag">اخبار روز</span>
-        <div class="date">${new Date(item.pubDate).toLocaleString("fa-IR")}</div>
+        <div class="date">
+          ${new Date(item.pubDate).toLocaleString("fa-IR")}
+        </div>
         <h2>${item.title}</h2>
         <p>منبع: ${item.author || "Google News"}</p>
         <a class="read" href="${item.link}" target="_blank">
