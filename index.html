@@ -16,7 +16,6 @@
     line-height:1.6;
   }
 
-  /* ---------- Header ---------- */
   header{
     background:linear-gradient(135deg,#111827,#1f2937);
     color:white;
@@ -27,7 +26,6 @@
   header h1{font-size:32px;margin-bottom:8px}
   header p{color:#d1d5db;font-size:14px}
 
-  /* ---------- Nav ---------- */
   nav{
     background:white;
     padding:12px;
@@ -55,14 +53,12 @@
   nav button:hover{background:#e5e7eb}
   nav button.active{background:#2563eb;color:white}
 
-  /* ---------- Container ---------- */
   .container{
     max-width:1050px;
     margin:25px auto;
     padding:0 15px;
   }
 
-  /* ---------- Breaking ---------- */
   .breaking{
     background:linear-gradient(90deg,#dc2626,#ef4444);
     color:white;
@@ -78,7 +74,6 @@
   .breaking::before{content:"●";animation:blink 1.4s infinite}
   @keyframes blink{50%{opacity:.3}}
 
-  /* ---------- Search ---------- */
   .search{
     display:flex;
     gap:8px;
@@ -107,7 +102,6 @@
   }
   .search button:hover{background:#1d4ed8}
 
-  /* ---------- Section Title ---------- */
   .title{
     border-right:5px solid #2563eb;
     padding-right:12px;
@@ -115,7 +109,6 @@
     font-size:20px;
   }
 
-  /* ---------- News Card ---------- */
   .news{
     background:white;
     padding:20px;
@@ -170,7 +163,6 @@
     border-radius:12px;
   }
 
-  /* ---------- Footer ---------- */
   footer{
     margin-top:40px;
     background:#111827;
@@ -217,7 +209,9 @@
 
   <h2 class="title">آخرین اخبار</h2>
 
-  <div id="newsList"></div>
+  <div id="newsList">
+    <p class="no-result">⏳ در حال بارگذاری اخبار...</p>
+  </div>
 
 </div>
 
