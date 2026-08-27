@@ -1,169 +1,94 @@
-const newsList = document.getElementById("newsList");
+name: دریافت اخبار ایرانی
 
-let allNews = [];
-let currentFilter = "همه";
+on:
+  schedule:
+    - cron: '*/15 * * * *'        # هر ۱۵ دقیقه
+  workflow_dispatch:
 
-// چند CORS proxy برای اینکه اگه یکی کار نکرد، بقیه امتحان بشن
-const PROXIES = [
-  "https://api.allorigins.win/raw?url=",
-  "https://corsproxy.io/?",
-  "https://api.codetabs.com/v1/proxy?quest="
-];
+jobs:
+  fetch-news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-// فیدهای ایرانی - فیدهایی که معمولاً در دسترس هستن
-const FEEDS = [
-  { url: "https://www.irna.ir/fa/rss.aspx?kind=-1",  cat: "ایران",   source: "ایرنا" },
-  { url: "https://www.isna.ir/rss",                 cat: "ایران",   source: "ایسنا" },
-  { url: "https://www.farsnews.ir/rss",             cat: "ایران",   source: "فارس" },
-  { url: "https://www.tasnimnews.ir/rss/feed/0",    cat: "ایران",   source: "تسنیم" },
-  { url: "https://www.varzesh3.com/rss/allnews",    cat: "ورزش",    source: "ورزش ۳" },
-  { url: "https://www.isna.ir/rss/sport",           cat: "ورزش",    source: "ایسنا ورزشی" },
-  { url: "https://www.mehrnews.com/rss/ID=25",      cat: "فناوری",  source: "مهر فناوری" },
-  { url: "https://www.isna.ir/rss/tech",            cat: "فناوری",  source: "ایسنا فناوری" },
-  { url: "https://www.irna.ir/fa/rss.aspx?kind=10", cat: "جهان",    source: "ایرنا جهان" },
-  { url: "https://www.tasnimnews.ir/rss/feed/2",    cat: "جهان",    source: "تسنیم جهان" }
-];
+      - name: دریافت فیدها
+        run: |
+          mkdir -p ./_feeds
 
-// تبدیل XML به آرایه
-function parseRSS(xmlText, defaultCategory, sourceName) {
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(xmlText, "text/xml");
-  const items = xml.querySelectorAll("item, entry");
-  const result = [];
-  items.forEach(item => {
-    const title = item.querySelector("title")?.textContent?.trim() || "";
-    const link  = item.querySelector("link")?.textContent?.trim() ||
-                  item.querySelector("link")?.getAttribute("href") || "#";
-    const pubDateRaw = item.querySelector("pubDate")?.textContent ||
-                       item.querySelector("published")?.textContent ||
-                       item.querySelector("dc\\:date")?.textContent || "";
-    const pubDate = pubDateRaw ? new Date(pubDateRaw) : new Date();
-    if (title) {
-      result.push({
-        title,
-        link,
-        author: sourceName,
-        pubDate,
-        category: defaultCategory
-      });
-    }
-  });
-  return result;
-}
+          fetch_feed() {
+            local url="$1"
+            local source="$2"
+            local file="_feeds/${source}.xml"
+            echo "📡 $source ..."
+            curl -sL --max-time 15 -A "Mozilla/5.0" "$url" -o "$file" 2>/dev/null || echo "" > "$file"
+          }
 
-async function fetchWithProxy(feedUrl) {
-  for (const proxy of PROXIES) {
-    try {
-      const url = proxy + encodeURIComponent(feedUrl);
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 7000);
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(timeout);
-      if (!res.ok) continue;
-      const text = await res.text();
-      if (text.includes("<rss") || text.includes("<feed")) {
-        return text;
-      }
-    } catch (e) {
-      console.warn("Proxy failed:", proxy, e);
-    }
-  }
-  return null;
-}
+          fetch_feed "https://www.irna.ir/fa/rss.aspx?kind=-1"        "irna-main"
+          fetch_feed "https://www.isna.ir/rss"                         "isna-main"
+          fetch_feed "https://www.farsnews.ir/rss"                     "fars-main"
+          fetch_feed "https://www.tasnimnews.ir/rss/feed/0"            "tasnim-main"
+          fetch_feed "https://www.varzesh3.com/rss/allnews"            "varzesh3"
+          fetch_feed "https://www.isna.ir/rss/sport"                   "isna-sport"
+          fetch_feed "https://www.mehrnews.com/rss/ID=25"              "mehr-tech"
+          fetch_feed "https://www.isna.ir/rss/tech"                    "isna-tech"
+          fetch_feed "https://www.irna.ir/fa/rss.aspx?kind=10"         "irna-world"
+          fetch_feed "https://www.tasnimnews.ir/rss/feed/2"            "tasnim-world"
 
-async function loadNews() {
-  newsList.innerHTML = "<p class='no-result'>⏳ در حال دریافت اخبار از خبرگزاری‌های ایرانی...</p>";
+      - name: ساخت news.json
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          const seen = new Set();
+          const items = [];
+          const feedsDir = '_feeds';
+          if (!fs.existsSync(feedsDir)) { fs.writeFileSync('news.json', '[]'); process.exit(0); }
+          for (const f of fs.readdirSync(feedsDir)) {
+            const xml = fs.readFileSync(path.join(feedsDir, f), 'utf8');
+            const source = f.replace('.xml','');
+            const itemMatches = [...xml.matchAll(/<item[\\s\\S]*?<\\/item>/g)];
+            for (const m of itemMatches) {
+              const block = m[0];
+              const get = (tag) => {
+                const r = block.match(new RegExp('<'+tag+'[^>]*>([\\s\\S]*?)<\\/'+tag+'>'));
+                return r ? r[1].replace(/<!\\[CDATA\\[|\\]\\]>/g,'').replace(/\\s+/g,' ').trim() : '';
+              };
+              const title = get('title');
+              const link  = get('link') || get('guid');
+              const date  = get('pubDate') || get('dc:date') || get('published');
+              if (!title || seen.has(title)) continue;
+              seen.add(title);
+              items.push({ title: title.slice(0,200), link, author: source, pubDate: date, category: 'ایران' });
+            }
+          }
+          items.sort((a,b) => new Date(b.pubDate||0) - new Date(a.pubDate||0));
+          fs.writeFileSync('news.json', JSON.stringify(items.slice(0,80), null, 2));
+          console.log('✅ تعداد خبر:', items.length);
+          "
 
-  const promises = FEEDS.map(async feed => {
-    const xml = await fetchWithProxy(feed.url);
-    if (!xml) return [];
-    return parseRSS(xml, feed.cat, feed.source);
-  });
+      - name: حدس دسته
+        run: |
+          node -e "
+          const fs = require('fs');
+          const news = JSON.parse(fs.readFileSync('news.json','utf8'));
+          const cat = (t='') => {
+            t = t.toLowerCase();
+            if (/(فوتبال|والیبال|تیم|لیگ|قهرمان|مربی|بازیکن|ورزش|پرسپولیس|استقلال|تراکتور|سپاهان|گل|مسابقه|جام|بسکتبال|کشتی|تنیس)/.test(t)) return 'ورزش';
+            if (/(گوشی|اپلیکیشن|هوش مصنوعی|تراشه|فناوری|دیجیتال|کامپیوتر|نرم‌افزار|اینترنت|اپل|سامسونگ|ربات|chatgpt)/.test(t)) return 'فناوری';
+            if (/(ایران|تهران|مجلس|وزیر|دولت|انتخابات|استان|یارانه|سبد کالا|قیمت|بازار|دلار|سکه|اقتصاد|تورم)/.test(t)) return 'ایران';
+            return 'جهان';
+          };
+          for (const n of news) n.category = cat(n.title);
+          fs.writeFileSync('news.json', JSON.stringify(news, null, 2));
+          "
+          rm -rf _feeds
 
-  const results = await Promise.allSettled(promises);
-  const flat = results
-    .filter(r => r.status === "fulfilled")
-    .map(r => r.value)
-    .flat();
-
-  // حذف تکراری بر اساس عنوان
-  const seen = new Set();
-  allNews = flat
-    .filter(n => {
-      if (seen.has(n.title)) return false;
-      seen.add(n.title);
-      return true;
-    })
-    .sort((a, b) => b.pubDate - a.pubDate)
-    .slice(0, 40)
-    .map((n, i) => ({ ...n, id: i }));
-
-  if (!allNews.length) {
-    newsList.innerHTML =
-      "<p class='no-result'>⚠️ نتوانستیم به فیدها وصل شویم.<br>" +
-      "ممکنه اینترنتت بلاک کرده باشه. یه VPN امتحان کن یا چند دقیقه بعد بیا.</p>";
-    return;
-  }
-  renderNews(allNews);
-}
-
-function renderNews(list) {
-  if (!list.length) {
-    newsList.innerHTML = "<p class='no-result'>🔍 خبری با این مشخصات پیدا نشد.</p>";
-    return;
-  }
-  newsList.innerHTML = list.map(item => {
-    const tagClass =
-      item.category === "ایران"   ? "tag-iran"  :
-      item.category === "جهان"   ? "tag-world" :
-      item.category === "ورزش"  ? "tag-sport" :
-                                   "tag-tech";
-    const dateStr = isNaN(item.pubDate)
-      ? "بدون تاریخ"
-      : item.pubDate.toLocaleString("fa-IR", { dateStyle: "short", timeStyle: "short" });
-    return `
-      <article class="news" data-category="${item.category}">
-        <span class="tag ${tagClass}">${item.category}</span>
-        <span class="date">📅 ${dateStr}</span>
-        <h2>${escapeHtml(item.title)}</h2>
-        <p>منبع: ${escapeHtml(item.author)}</p>
-        <a class="read" href="${item.link}" target="_blank" rel="noopener noreferrer">
-          ادامه خبر ←
-        </a>
-      </article>`;
-  }).join("");
-}
-
-function escapeHtml(str = "") {
-  return String(str)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-}
-
-function filterNews(category) {
-  setActiveBtn(category);
-  currentFilter = category;
-  document.getElementById("searchInput").value = "";
-  const filtered = category === "همه" ? allNews : allNews.filter(n => n.category === category);
-  renderNews(filtered);
-}
-
-function showAll() { filterNews("همه"); }
-
-function searchNews() {
-  const q = document.getElementById("searchInput").value.trim();
-  const base = currentFilter === "همه" ? allNews : allNews.filter(n => n.category === currentFilter);
-  if (!q) { renderNews(base); return; }
-  const result = base.filter(n =>
-    n.title.includes(q) || n.author.includes(q) || n.category.includes(q)
-  );
-  renderNews(result);
-}
-
-function setActiveBtn(category) {
-  document.querySelectorAll("#nav button").forEach(btn => {
-    btn.classList.toggle("active", btn.textContent.trim() === category);
-  });
-}
-
-loadNews();
+      - name: ثبت تغییرات
+        run: |
+          git config user.name "news-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add news.json
+          git diff --staged --quiet || git commit -m "🤖 بروزرسانی خودکار اخبار - $(date -u +'%Y-%m-%d %H:%M')"
+          git push
