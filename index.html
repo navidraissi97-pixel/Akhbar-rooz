@@ -4,39 +4,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>اخبار روز</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f2f2f2;
       color: #222;
     }
 
     header {
-      background: #c00;
+      background: #c40000;
       color: white;
-      padding: 20px;
       text-align: center;
+      padding: 25px 15px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
     }
 
     nav {
       background: white;
       padding: 12px;
       text-align: center;
+      border-bottom: 1px solid #ddd;
     }
 
     nav button {
-      padding: 8px 15px;
-      margin: 3px;
       border: none;
-      border-radius: 5px;
+      background: #eee;
+      padding: 9px 16px;
+      margin: 3px;
+      border-radius: 6px;
       cursor: pointer;
+      font-family: inherit;
     }
 
     nav button.active {
-      background: #c00;
+      background: #c40000;
       color: white;
     }
 
@@ -48,36 +65,43 @@
 
     .breaking {
       background: white;
+      border-right: 5px solid #c40000;
       padding: 15px;
-      border-radius: 8px;
       margin-bottom: 15px;
+      border-radius: 8px;
+      font-weight: bold;
     }
 
     .search {
       display: flex;
-      gap: 5px;
+      gap: 8px;
       margin-bottom: 20px;
     }
 
     .search input {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 15px;
     }
 
     .search button {
-      padding: 10px 20px;
       border: none;
-      background: #c00;
+      background: #c40000;
       color: white;
-      border-radius: 5px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .title {
       background: white;
       padding: 15px;
       border-radius: 8px;
+      margin-bottom: 12px;
     }
 
     #newsList {
@@ -87,22 +111,39 @@
     }
 
     .news-item {
-      padding: 15px 0;
+      padding: 15px 5px;
       border-bottom: 1px solid #ddd;
     }
 
+    .news-item:last-child {
+      border-bottom: none;
+    }
+
     .news-item h2 {
+      margin-top: 0;
       font-size: 20px;
+      line-height: 1.6;
     }
 
     .news-item p {
-      line-height: 1.8;
+      line-height: 2;
+      color: #555;
+    }
+
+    .news-item a {
+      display: inline-block;
+      color: #c40000;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 5px;
     }
 
     footer {
+      background: white;
       text-align: center;
-      padding: 20px;
+      padding: 25px 15px;
       margin-top: 30px;
+      border-top: 1px solid #ddd;
     }
   </style>
 </head>
@@ -114,7 +155,7 @@
     <p>آخرین اخبار ایران و جهان</p>
   </header>
 
-  <nav>
+  <nav id="nav">
     <button class="active">همه</button>
     <button>ایران</button>
     <button>جهان</button>
@@ -129,78 +170,49 @@
     </div>
 
     <div class="search">
-      <input type="text" placeholder="جستجوی خبر...">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="جستجوی خبر..."
+      >
       <button>جستجو</button>
     </div>
 
     <h2 class="title">آخرین اخبار</h2>
 
     <div id="newsList">
-      <p>⏳ درasync function loadNews() {
-  const newsList = document.getElementById("newsList");
 
-  if (!newsList) return;
-
-  newsList.innerHTML = "<p>⏳ در حال دریافت اخبار...</p>";
-
-  try {
-    const rss = "https://www.isna.ir/rss";
-
-    const url =
-      "https://api.rss2json.com/v1/api.json?rss_url=" +
-      encodeURIComponent(rss);
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error("خطا در دریافت اخبار");
-    }
-
-    const data = await response.json();
-
-    if (!data.items || data.items.length === 0) {
-      throw new Error("خبری پیدا نشد");
-    }
-
-    newsList.innerHTML = "";
-
-    data.items.slice(0, 10).forEach(news => {
-      const article = document.createElement("div");
-      article.className = "news-item";
-
-      article.innerHTML = 
-        <h2>${news.title}</h2>
-        <p>${news.description || ""}</p>
-        <a href="${news.link}" target="_blank" rel="noopener">
-          ادامه خبر
-        </a>
-      ;
-
-      newsList.appendChild(article);
-    });
-
-  } catch (error) {
-    console.error(error);
-
-    newsList.innerHTML = 
       <div class="news-item">
-        <h2>⚠️ دریافت اخبار انجام نشد</h2>
-        <p>لطفاً چند لحظه بعد دوباره صفحه را باز کنید.</p>
+        <h2>خبر اول امروز</h2>
+        <p>
+          این بخش برای نمایش آخرین اخبار سایت اخبار روز آماده شده است.
+        </p>
+        <a href="#">ادامه خبر</a>
       </div>
-    ;
-  }
-}
 
-loadNews(); حال بارگذاری اخبار...</p>
+      <div class="news-item">
+        <h2>خبر دوم امروز</h2>
+        <p>
+          اخبار ایران و جهان در این قسمت نمایش داده خواهند شد.
+        </p>
+        <a href="#">ادامه خبر</a>
+      </div>
+
+      <div class="news-item">
+        <h2>خبر سوم امروز</h2>
+        <p>
+          بخش اخبار سایت با موفقیت فعال شده است.
+        </p>
+        <a href="#">ادامه خبر</a>
+      </div>
+
     </div>
 
   </div>
 
   <footer>
-    © ۱۴۰۵ — ساخته شده با ❤️
+    <p>© ۱۴۰۵ — ساخته شده با ❤️ | درباره ما · تماس</p>
   </footer>
-
-
 
 </body>
 </html>
