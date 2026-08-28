@@ -217,3 +217,9 @@
 }
 
 loadNews();
+[28/08/2026 7:51 am] رئیس: alert("news.js اجرا شد");
+
+document.querySelector("#newsList").innerHTML =
+  "<h2>تست موفق شد ✅</h2><p>فایل news.js درست اجرا می‌شود.</p>";
+[28/08/2026 7:55 am] رئیس: document.querySelector("#newsList").innerHTML =
+  "<h2>تست جدید ✅</h2><p>کد جدید اجرا شد.</p>";
