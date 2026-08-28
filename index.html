@@ -1,209 +1,4 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اخبار روز</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f2f4f7;
-      color: #222;
-    }
-
-    header {
-      background: #1565c0;
-      color: white;
-      text-align: center;
-      padding: 25px 15px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    header p {
-      margin: 10px 0 0;
-      font-size: 14px;
-    }
-
-    nav {
-      background: white;
-      padding: 12px;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      box-shadow: 0 2px 5px #ddd;
-    }
-
-    nav button {
-      border: none;
-      background: #eeeeee;
-      padding: 10px 15px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    nav button.active {
-      background: #1565c0;
-      color: white;
-    }
-
-    .search {
-      max-width: 850px;
-      margin: 20px auto;
-      padding: 0 15px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .search input {
-      flex: 1;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 15px;
-    }
-
-    .search button {
-      border: none;
-      background: #1565c0;
-      color: white;
-      padding: 0 20px;
-      border-radius: 8px;
-      font-family: inherit;
-      cursor: pointer;
-    }
-
-    #newsList {
-      max-width: 850px;
-      margin: auto;
-      padding: 0 15px 30px;
-    }
-
-    .news {
-      background: white;
-      margin-bottom: 15px;
-      padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px #ddd;
-    }
-
-    .news h2 {
-      margin: 0 0 10px;
-      color: #1565c0;
-      font-size: 19px;
-      line-height: 1.8;
-    }
-
-    .news p {
-      color: #555;
-      line-height: 1.9;
-      margin: 8px 0 15px;
-    }
-
-    .source {
-      color: #888;
-      font-size: 12px;
-      margin-bottom: 7px;
-    }
-
-    .news a {
-      color: #1565c0;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .message {
-      background: white;
-      padding: 25px;
-      text-align: center;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px #ddd;
-    }
-
-    footer {
-      text-align: center;
-      color: #777;
-      padding: 25px;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <h1>📰 اخبار روز</h1>
-  <p>آخرین اخبار ایران و جهان</p>
-</header>
-
-<nav id="nav">
-  <button class="active" data-category="all">همه</button>
-  <button data-category="iran">ایران</button>
-  <button data-category="sport">ورزش</button>
-  <button data-category="tech">فناوری</button>
-</nav>
-
-<div class="search">
-  <input
-    id="searchInput"
-    type="text"
-    placeholder="جستجوی خبر..."
-  >
-  <button id="searchButton">جستجو</button>
-</div>
-
-<div id="newsList">
-  <div class="message">
-    در حال دریافت اخبار...
-  </div>
-</div>
-
-<footer>
-  اخبار روز
-</footer>
-
-<script>
-
-const newsList =
-  document.getElementById("newsList");
-
-const searchInput =
-  document.getElementById("searchInput");
-
-const searchButton =
-  document.getElementById("searchButton");
-
-let allNews = [];
-
-async function loadNews() {
-
-  try {
-
-    newsList.innerHTML =
-      '<div class="message">در حال دریافت اخبار...</div>';
-
-    const response =
-      await fetch("./news.json?time=" + Date.now());
-
-    if (!response.ok) {
-      throw new Error("news.json پیدا نشد");
-    }
-
-    const data =
-      await response.json();
-
-    if (!data.items || data.items.length === 0) {
+if (!data.items  data.items.length === 0) {
       throw new Error("خبری داخل news.json نیست");
     }
 
@@ -239,7 +34,7 @@ async function loadNews() {
 
 function showNews(news) {
 
-  if (!news || news.length === 0) {
+  if (!news  news.length === 0) {
 
     newsList.innerHTML =
       '<div class="message">خبری پیدا نشد.</div>';
@@ -254,9 +49,9 @@ function showNews(news) {
     const article = document.createElement("article");
     article.className = "news";
 
-    const title = item.title || "بدون عنوان";
+    const title = item.title  "بدون عنوان";
     const description = cleanText(item.description);
-    const link = item.link || "#";
+    const link = item.link  "#";
 
     article.innerHTML = 
       <div class="source">
@@ -295,10 +90,10 @@ function searchNews() {
   const result = allNews.filter(item => {
 
     const title =
-      (item.title || "").toLowerCase();
+      (item.title  "").toLowerCase();
 
     const description =
-      (item.description || "").toLowerCase();
+      (item.description  "").toLowerCase();
 
     return (
       title.includes(text) ||
