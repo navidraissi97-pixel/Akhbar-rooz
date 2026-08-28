@@ -1,46 +1,24 @@
-try {
-
-        const response = await fetch(api);
-
-        if (!response.ok) {
-          throw new Error("خطا در اتصال");
-        }
-
-        const data = await response.json();
-
-        if (!data.items || data.items.length === 0) {
-          throw new Error("خبری دریافت نشد");
-        }
-
-        allNews = data.items;
-
-        showNews(allNews);
-
-      } catch (error) {
-
-        newsList.innerHTML = 
+newsList.innerHTML = `
           <div class="error">
             ❌ دریافت اخبار انجام نشد.
             <br><br>
             لطفاً اتصال اینترنت را بررسی کنید.
           </div>
-        ;
+        `;
 
         console.log(error);
-
       }
     }
-
 
     function showNews(news) {
 
       if (news.length === 0) {
 
-        newsList.innerHTML = 
+        newsList.innerHTML = `
           <div class="error">
             خبری پیدا نشد.
           </div>
-        ;
+        `;
 
         return;
       }
@@ -53,8 +31,7 @@ try {
 
         article.className = "news-item";
 
-        article.innerHTML = 
-
+        article.innerHTML = `
           <h2>${item.title || "بدون عنوان"}</h2>
 
           <p>
@@ -62,21 +39,17 @@ try {
           </p>
 
           <a
-            href="${item.link}"
+            href="${item.link || "#"}"
             target="_blank"
             rel="noopener noreferrer"
           >
             ادامه خبر ←
           </a>
-
-        ;
+        `;
 
         newsList.appendChild(article);
-
       });
-
     }
-
 
     function cleanDescription(text) {
 
@@ -88,7 +61,7 @@ try {
 
       div.innerHTML = text;
 
-      let result = div.textContent  div.innerText  "";
+      let result = div.textContent || div.innerText || "";
 
       result = result.trim();
 
@@ -99,9 +72,7 @@ try {
       return result;
     }
 
-
     searchButton.addEventListener("click", searchNews);
-
 
     searchInput.addEventListener("keyup", function(event) {
 
@@ -111,16 +82,13 @@ try {
 
     });
 
-
     function searchNews() {
 
       const text =
         searchInput.value.trim().toLowerCase();
 
       if (!text) {
-
         showNews(allNews);
-
         return;
       }
 
@@ -136,31 +104,34 @@ try {
           title.includes(text) ||
           description.includes(text)
         );
-
       });
 
       showNews(result);
-
     }
 
+    document
+      .querySelectorAll("#nav button")
+      .forEach(button => {
 
-    document.querySelectorAll("#nav button").forEach(button => {
+        button.addEventListener("click", function() {
 
-      button.addEventListener("click", function() {
+          document
+            .querySelectorAll("#nav button")
+            .forEach(btn =>
+              btn.classList.remove("active")
+            );
 
-        document
-          .querySelectorAll("#nav button")
-          .forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
 
-        this.classList.add("active");
+          const category =
+            this.textContent.trim();
 
-        const category = this.textContent.trim();
+          if (category === "همه") {
 
-        if (category === "همه") {
+            showNews(allNews);
 
-          showNews(allNews);
-
-        } else {
+            return;
+          }
 
           const filtered = allNews.filter(item => {
 
@@ -172,8 +143,10 @@ try {
               ).toLowerCase();
 
             if (category === "ایران") {
-              return text.includes("ایران") ||
-                     text.includes("تهران");
+              return (
+                text.includes("ایران") ||
+                text.includes("تهران")
+              );
             }
 
             if (category === "جهان") {
@@ -181,30 +154,27 @@ try {
             }
 
             if (category === "ورزش") {
-              return text.includes("ورزش") ||
-                     text.includes("فوتبال");
+              return (
+                text.includes("ورزش") ||
+                text.includes("فوتبال")
+              );
             }
 
             if (category === "فناوری") {
-              return text.includes("فناوری") ||
-                     text.includes("تکنولوژی");
+              return (
+                text.includes("فناوری") ||
+                text.includes("تکنولوژی")
+              );
             }
 
             return true;
-
           });
 
           showNews(filtered);
-
-        }
-
+        });
       });
 
-    });
-
-
     loadNews();
-
   </script>
 
 </body>
