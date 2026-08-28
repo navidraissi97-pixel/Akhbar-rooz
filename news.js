@@ -1,10 +1,5 @@
-const newsList = document.querySelector("#newsList");
+const newsList = document.getElementById("newsList");
 
 if (newsList) {
-  newsList.innerHTML = 
-    <div class="news-item">
-      <h2>اخبار روز ✅</h2>
-      <p>سیستم نمایش اخبار با موفقیت کار می‌کند.</p>
-    </div>
-  ;
+  newsList.innerHTML = "<h2>تست اخبار روز ✅</h2>";
 }
