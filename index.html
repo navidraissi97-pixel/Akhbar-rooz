@@ -1,218 +1,211 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+try {
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        const response = await fetch(api);
 
-  <title>اخبار روز</title>
+        if (!response.ok) {
+          throw new Error("خطا در اتصال");
+        }
 
-  <style>
-    * {
-      box-sizing: border-box;
+        const data = await response.json();
+
+        if (!data.items || data.items.length === 0) {
+          throw new Error("خبری دریافت نشد");
+        }
+
+        allNews = data.items;
+
+        showNews(allNews);
+
+      } catch (error) {
+
+        newsList.innerHTML = 
+          <div class="error">
+            ❌ دریافت اخبار انجام نشد.
+            <br><br>
+            لطفاً اتصال اینترنت را بررسی کنید.
+          </div>
+        ;
+
+        console.log(error);
+
+      }
     }
 
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f2f2f2;
-      color: #222;
+
+    function showNews(news) {
+
+      if (news.length === 0) {
+
+        newsList.innerHTML = 
+          <div class="error">
+            خبری پیدا نشد.
+          </div>
+        ;
+
+        return;
+      }
+
+      newsList.innerHTML = "";
+
+      news.slice(0, 20).forEach(item => {
+
+        const article = document.createElement("div");
+
+        article.className = "news-item";
+
+        article.innerHTML = 
+
+          <h2>${item.title || "بدون عنوان"}</h2>
+
+          <p>
+            ${cleanDescription(item.description)}
+          </p>
+
+          <a
+            href="${item.link}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ادامه خبر ←
+          </a>
+
+        ;
+
+        newsList.appendChild(article);
+
+      });
+
     }
 
-    header {
-      background: #c40000;
-      color: white;
-      text-align: center;
-      padding: 25px 15px;
+
+    function cleanDescription(text) {
+
+      if (!text) {
+        return "برای مشاهده جزئیات خبر روی «ادامه خبر» کلیک کنید.";
+      }
+
+      const div = document.createElement("div");
+
+      div.innerHTML = text;
+
+      let result = div.textContent  div.innerText  "";
+
+      result = result.trim();
+
+      if (result.length > 250) {
+        result = result.substring(0, 250) + "...";
+      }
+
+      return result;
     }
 
-    header h1 {
-      margin: 0 0 8px;
-      font-size: 30px;
+
+    searchButton.addEventListener("click", searchNews);
+
+
+    searchInput.addEventListener("keyup", function(event) {
+
+      if (event.key === "Enter") {
+        searchNews();
+      }
+
+    });
+
+
+    function searchNews() {
+
+      const text =
+        searchInput.value.trim().toLowerCase();
+
+      if (!text) {
+
+        showNews(allNews);
+
+        return;
+      }
+
+      const result = allNews.filter(item => {
+
+        const title =
+          (item.title || "").toLowerCase();
+
+        const description =
+          (item.description || "").toLowerCase();
+
+        return (
+          title.includes(text) ||
+          description.includes(text)
+        );
+
+      });
+
+      showNews(result);
+
     }
 
-    header p {
-      margin: 0;
-    }
 
-    nav {
-      background: white;
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
+    document.querySelectorAll("#nav button").forEach(button => {
 
-    nav button {
-      border: none;
-      background: #eee;
-      padding: 9px 16px;
-      margin: 3px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
-    }
+      button.addEventListener("click", function() {
 
-    nav button.active {
-      background: #c40000;
-      color: white;
-    }
+        document
+          .querySelectorAll("#nav button")
+          .forEach(btn => btn.classList.remove("active"));
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 15px;
-    }
+        this.classList.add("active");
 
-    .breaking {
-      background: white;
-      border-right: 5px solid #c40000;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+        const category = this.textContent.trim();
 
-    .search {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
+        if (category === "همه") {
 
-    .search input {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 15px;
-    }
+          showNews(allNews);
 
-    .search button {
-      border: none;
-      background: #c40000;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
-    }
+        } else {
 
-    .title {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
+          const filtered = allNews.filter(item => {
 
-    #newsList {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-    }
+            const text =
+              (
+                (item.title || "") +
+                " " +
+                (item.description || "")
+              ).toLowerCase();
 
-    .news-item {
-      padding: 15px 5px;
-      border-bottom: 1px solid #ddd;
-    }
+            if (category === "ایران") {
+              return text.includes("ایران") ||
+                     text.includes("تهران");
+            }
 
-    .news-item:last-child {
-      border-bottom: none;
-    }
+            if (category === "جهان") {
+              return !text.includes("ایران");
+            }
 
-    .news-item h2 {
-      margin-top: 0;
-      font-size: 20px;
-      line-height: 1.6;
-    }
+            if (category === "ورزش") {
+              return text.includes("ورزش") ||
+                     text.includes("فوتبال");
+            }
 
-    .news-item p {
-      line-height: 2;
-      color: #555;
-    }
+            if (category === "فناوری") {
+              return text.includes("فناوری") ||
+                     text.includes("تکنولوژی");
+            }
 
-    .news-item a {
-      display: inline-block;
-      color: #c40000;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 5px;
-    }
+            return true;
 
-    footer {
-      background: white;
-      text-align: center;
-      padding: 25px 15px;
-      margin-top: 30px;
-      border-top: 1px solid #ddd;
-    }
-  </style>
-</head>
+          });
 
-<body>
+          showNews(filtered);
 
-  <header>
-    <h1>اخبار روز</h1>
-    <p>آخرین اخبار ایران و جهان</p>
-  </header>
+        }
 
-  <nav id="nav">
-    <button class="active">همه</button>
-    <button>ایران</button>
-    <button>جهان</button>
-    <button>ورزش</button>
-    <button>فناوری</button>
-  </nav>
+      });
 
-  <div class="container">
+    });
 
-    <div class="breaking">
-      🔴 خبر فوری | تازه‌ترین رویدادهای مهم را اینجا دنبال کنید
-    </div>
 
-    <div class="search">
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="جستجوی خبر..."
-      >
-      <button>جستجو</button>
-    </div>
+    loadNews();
 
-    <h2 class="title">آخرین اخبار</h2>
-
-    <div id="newsList">
-
-      <div class="news-item">
-        <h2>خبر اول امروز</h2>
-        <p>
-          این بخش برای نمایش آخرین اخبار سایت اخبار روز آماده شده است.
-        </p>
-        <a href="#">ادامه خبر</a>
-      </div>
-
-      <div class="news-item">
-        <h2>خبر دوم امروز</h2>
-        <p>
-          اخبار ایران و جهان در این قسمت نمایش داده خواهند شد.
-        </p>
-        <a href="#">ادامه خبر</a>
-      </div>
-
-      <div class="news-item">
-        <h2>خبر سوم امروز</h2>
-        <p>
-          بخش اخبار سایت با موفقیت فعال شده است.
-        </p>
-        <a href="#">ادامه خبر</a>
-      </div>
-
-    </div>
-
-  </div>
-
-  <footer>
-    <p>© ۱۴۰۵ — ساخته شده با ❤️ | درباره ما · تماس</p>
-  </footer>
+  </script>
 
 </body>
 </html>
