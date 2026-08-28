@@ -1,224 +1,164 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="آخرین اخبار ایران و جهان - به‌روزترین خبرهای سیاسی، ورزشی و فناوری">
-<title>اخبار روز | آخرین خبرهای ایران و جهان</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
+  <title>اخبار روز</title>
 
-  body{
-    font-family:Tahoma,Arial,sans-serif;
-    background:#f4f6f8;
-    color:#222;
-    line-height:1.6;
-  }
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
 
-  header{
-    background:linear-gradient(135deg,#111827,#1f2937);
-    color:white;
-    text-align:center;
-    padding:30px 15px;
-    box-shadow:0 2px 10px rgba(0,0,0,.2);
-  }
-  header h1{font-size:32px;margin-bottom:8px}
-  header p{color:#d1d5db;font-size:14px}
+    header {
+      background: #c00;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-  nav{
-    background:white;
-    padding:12px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-    position:sticky;
-    top:0;
-    z-index:10;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:6px;
-  }
-  nav button{
-    border:0;
-    background:none;
-    padding:8px 16px;
-    font-weight:bold;
-    cursor:pointer;
-    border-radius:8px;
-    color:#374151;
-    transition:.2s;
-    font-family:inherit;
-  }
-  nav button:hover{background:#e5e7eb}
-  nav button.active{background:#2563eb;color:white}
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: white;
+    }
 
-  .container{
-    max-width:1050px;
-    margin:25px auto;
-    padding:0 15px;
-  }
+    nav button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-  .breaking{
-    background:linear-gradient(90deg,#dc2626,#ef4444);
-    color:white;
-    padding:14px 18px;
-    border-radius:10px;
-    margin-bottom:25px;
-    font-weight:bold;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    box-shadow:0 3px 10px rgba(220,38,38,.25);
-  }
-  .breaking::before{content:"●";animation:blink 1.4s infinite}
-  @keyframes blink{50%{opacity:.3}}
+    nav button.active {
+      background: #c00;
+      color: white;
+    }
 
-  .search{
-    display:flex;
-    gap:8px;
-    margin-bottom:25px;
-  }
-  .search input{
-    flex:1;
-    padding:13px 16px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    font-size:15px;
-    font-family:inherit;
-    transition:.2s;
-  }
-  .search input:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
-  .search button{
-    padding:13px 24px;
-    border:0;
-    border-radius:8px;
-    background:#2563eb;
-    color:white;
-    cursor:pointer;
-    font-weight:bold;
-    font-family:inherit;
-    transition:.2s;
-  }
-  .search button:hover{background:#1d4ed8}
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 15px;
+    }
 
-  .title{
-    border-right:5px solid #2563eb;
-    padding-right:12px;
-    margin:30px 0 18px;
-    font-size:20px;
-  }
+    .breaking {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
 
-  .news{
-    background:white;
-    padding:20px;
-    margin-bottom:18px;
-    border-radius:12px;
-    box-shadow:0 3px 12px rgba(0,0,0,.06);
-    transition:.2s;
-  }
-  .news:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.1)}
-  .news h2{margin:8px 0;font-size:19px;color:#111827}
-  .news p{line-height:1.9;color:#555;margin:8px 0}
+    .search {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
 
-  .tag{
-    display:inline-block;
-    padding:5px 11px;
-    border-radius:6px;
-    font-size:12px;
-    font-weight:bold;
-    color:white;
-  }
-  .tag-iran{background:#dc2626}
-  .tag-world{background:#2563eb}
-  .tag-sport{background:#16a34a}
-  .tag-tech{background:#9333ea}
+    .search input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-  .date{
-    color:#888;
-    font-size:12px;
-    margin:8px 0;
-    display:inline-block;
-    margin-right:8px;
-  }
+    .search button {
+      padding: 10px 20px;
+      border: none;
+      background: #c00;
+      color: white;
+      border-radius: 5px;
+    }
 
-  .read{
-    display:inline-block;
-    background:#2563eb;
-    color:white;
-    padding:9px 18px;
-    border-radius:7px;
-    text-decoration:none;
-    font-size:14px;
-    transition:.2s;
-    margin-top:8px;
-  }
-  .read:hover{background:#1d4ed8}
+    .title {
+      margin-bottom: 15px;
+    }
 
-  .no-result{
-    text-align:center;
-    padding:40px;
-    color:#888;
-    background:white;
-    border-radius:12px;
-  }
+    #newsList {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+    }
 
-  footer{
-    margin-top:40px;
-    background:#111827;
-    color:#ddd;
-    text-align:center;
-    padding:25px 15px;
-    font-size:14px;
-  }
-  footer a{color:#93c5fd;text-decoration:none}
+    .news-item {
+      padding: 15px 0;
+      border-bottom: 1px solid #ddd;
+    }
 
-  @media(max-width:600px){
-    nav button{padding:6px 10px;font-size:13px}
-    .search{flex-direction:column}
-    header h1{font-size:24px}
-  }
-</style>
+    .news-item h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    .news-item p {
+      line-height: 1.8;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+      background: white;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <h1>📰 اخبار روز</h1>
-  <p>آخرین اخبار مهم ایران و جهان — به‌روزرسانی لحظه‌ای</p>
-</header>
+  <header>
+    <h1>اخبار روز</h1>
+    <p>آخرین اخبار ایران و جهان</p>
+  </header>
 
-<nav id="nav">
-  <button class="active" onclick="filterNews('همه')">همه</button>
-  <button onclick="filterNews('ایران')">ایران</button>
-  <button onclick="filterNews('جهان')">جهان</button>
-  <button onclick="filterNews('ورزش')">ورزش</button>
-  <button onclick="filterNews('فناوری')">فناوری</button>
-</nav>
+  <nav id="nav">
+    <button class="active">همه</button>
+    <button>ایران</button>
+    <button>جهان</button>
+    <button>ورزش</button>
+    <button>فناوری</button>
+  </nav>
 
-<div class="container">
+  <div class="container">
 
-  <div class="breaking">
-    🔴 خبر فوری | تازه‌ترین رویدادهای مهم را اینجا دنبال کنید
+    <div class="breaking">
+      🔴 خبر فوری | تازه‌ترین رویدادهای مهم را اینجا دنبال کنید
+    </div>
+
+    <div class="search">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="جستجوی خبر..."
+      >
+
+      <button>
+        جستجو
+      </button>
+    </div>
+
+    <h2 class="title">آخرین اخبار</h2>
+
+    <div id="newsList">
+      <p>⏳ در حال بارگذاری اخبار...</p>
+    </div>
+
   </div>
 
-  <div class="search">
-    <input id="searchInput" type="text" placeholder="جستجوی خبر..." onkeyup="if(event.key==='Enter')searchNews()">
-    <button onclick="searchNews()">جستجو</button>
-  </div>
+  <footer>
+    <p>© ۱۴۰۵ — ساخته شده با ❤️ | درباره ما · تماس</p>
+  </footer>
 
-  <h2 class="title">آخرین اخبار</h2>
+  <script>
+    alert("index کار می‌کند");
+  </script>
 
-  <div id="newsList">
-    <p class="no-result">⏳ در حال بارگذاری اخبار...</p>
-  </div>
+  <script src="news.js"></script>
 
-</div>
-
-<footer>
-  <p>© ۱۴۰۵ — ساخته شده با ❤️ | <a href="#">درباره ما</a> · <a href="#">تماس</a></p>
-</footer>
-
-<script src="news.js"></script>
 </body>
 </html>
