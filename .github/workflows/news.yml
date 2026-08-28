@@ -7,9 +7,71 @@ permissions:
   contents: write
 
 jobs:
-  test:
+  update-news:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test GitHub Actions
-        run: echo "WORKFLOW OK"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download news
+        run: |
+          python - <<'PY'
+          import urllib.request
+          import json
+          import xml.etree.ElementTree as ET
+
+          feeds = {
+              "iran": "https://www.mehrnews.com/rss/tp/575",
+              "sport": "https://www.mehrnews.com/rss/tp/9",
+              "tech": "https://www.mehrnews.com/rss/tp/751"
+          }
+
+          news = []
+
+          for category, url in feeds.items():
+              try:
+                  req = urllib.request.Request(
+                      url,
+                      headers={"User-Agent": "Mozilla/5.0"}
+                  )
+
+                  data = urllib.request.urlopen(
+                      req,
+                      timeout=30
+                  ).read()
+
+                  root = ET.fromstring(data)
+
+                  for item in root.findall(".//item"):
+                      news.append({
+                          "title": item.findtext("title") or "",
+                          "description": item.findtext("description") or "",
+                          "link": item.findtext("link") or "",
+                          "pubDate": item.findtext("pubDate") or "",
+                          "category": category
+                      })
+
+                  print(category, "OK")
+
+              except Exception as e:
+                  print(category, "ERROR:", e)
+
+          with open("news.json", "w", encoding="utf-8") as f:
+              json.dump(
+                  {"items": news},
+                  f,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print("TOTAL NEWS:", len(news))
+          PY
+
+      - name: Commit news
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add news.json
+          git diff --cached --quiet || git commit -m "Update news"
+          git push
