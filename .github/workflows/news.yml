@@ -14,4 +14,71 @@ jobs:
 
     steps:
       - name: Get repository
-      uses: actions/checkout@v4
+        uses: actions/checkout@v4
+
+      - name: Download news
+        run: |
+          python - <<'PY'
+          import urllib.request
+          import json
+          import xml.etree.ElementTree as ET
+          from datetime import datetime, timezone
+
+          feeds = {
+              "iran": "https://www.mehrnews.com/rss/tp/575",
+              "sport": "https://www.mehrnews.com/rss/tp/9",
+              "tech": "https://www.mehrnews.com/rss/tp/751"
+          }
+
+          all_news = []
+
+          for category, url in feeds.items():
+              try:
+                  request = urllib.request.Request(
+                      url,
+                      headers={"User-Agent": "Mozilla/5.0"}
+                  )
+
+                  data = urllib.request.urlopen(
+                      request,
+                      timeout=30
+                  ).read()
+
+                  root = ET.fromstring(data)
+
+                  for item in root.findall(".//item"):
+                      title = item.findtext("title") or ""
+                      description = item.findtext("description") or ""
+                      link = item.findtext("link") or ""
+                      pub_date = item.findtext("pubDate") or ""
+
+                      all_news.append({
+                          "title": title.strip(),
+                          "description": description.strip(),
+                          "link": link.strip(),
+                          "pubDate": pub_date.strip(),
+                          "category": category
+                      })
+
+              except Exception as e:
+                  print("Feed error:", category, e)
+
+          result = {
+              "updated": datetime.now(timezone.utc).isoformat(),
+              "count": len(all_news),
+              "items": all_news
+          }
+
+          with open("news.json", "w", encoding="utf-8") as f:
+              json.dump(result, f, ensure_ascii=False, indent=2)
+
+          print("News saved:", len(all_news))
+          PY
+
+      - name: Save news
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add news.json
+          git diff --cached --quiet || git commit -m "Update news"
+          git push
