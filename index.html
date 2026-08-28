@@ -6,125 +6,127 @@
 <title>اخبار روز</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    font-family:Tahoma,Arial,sans-serif;
-    background:#f1f3f6;
-    color:#222;
+* {
+  box-sizing: border-box;
 }
 
-header{
-    background:#1565c0;
-    color:white;
-    text-align:center;
-    padding:25px 15px;
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f2f4f7;
+  color: #222;
 }
 
-header h1{
-    margin:0;
-    font-size:28px;
+header {
+  background: #1565c0;
+  color: white;
+  text-align: center;
+  padding: 25px 15px;
 }
 
-header p{
-    margin:10px 0 0;
+header h1 {
+  margin: 0;
+  font-size: 28px;
 }
 
-nav{
-    background:white;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    padding:12px;
-    flex-wrap:wrap;
-    box-shadow:0 1px 4px #ccc;
+header p {
+  margin: 10px 0 0;
 }
 
-nav button{
-    border:0;
-    padding:10px 18px;
-    border-radius:20px;
-    background:#eee;
-    font-family:inherit;
-    cursor:pointer;
+nav {
+  background: white;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 4px #ccc;
 }
 
-nav button.active{
-    background:#1565c0;
-    color:white;
+nav button {
+  border: 0;
+  padding: 10px 18px;
+  border-radius: 20px;
+  background: #eee;
+  font-family: inherit;
+  cursor: pointer;
 }
 
-.search{
-    max-width:850px;
-    margin:20px auto;
-    padding:0 15px;
-    display:flex;
-    gap:8px;
+nav button.active {
+  background: #1565c0;
+  color: white;
 }
 
-.search input{
-    flex:1;
-    padding:13px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-family:inherit;
-    font-size:15px;
+.search {
+  max-width: 850px;
+  margin: 20px auto;
+  padding: 0 15px;
+  display: flex;
+  gap: 8px;
 }
 
-.search button{
-    border:0;
-    background:#1565c0;
-    color:white;
-    padding:0 20px;
-    border-radius:8px;
-    font-family:inherit;
+.search input {
+  flex: 1;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
 }
 
-#newsList{
-    max-width:850px;
-    margin:auto;
-    padding:0 15px 30px;
+.search button {
+  border: 0;
+  background: #1565c0;
+  color: white;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-family: inherit;
 }
 
-.news{
-    background:white;
-    margin-bottom:15px;
-    padding:18px;
-    border-radius:10px;
-    box-shadow:0 2px 8px #ddd;
+#newsList {
+  max-width: 850px;
+  margin: auto;
+  padding: 0 15px 30px;
 }
 
-.news h2{
-    margin:0 0 10px;
-    color:#1565c0;
-    font-size:19px;
-    line-height:1.8;
+.news {
+  background: white;
+  margin-bottom: 15px;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #ddd;
 }
 
-.news p{
-    color:#555;
-    line-height:1.9;
+.news h2 {
+  margin: 0 0 10px;
+  color: #1565c0;
+  font-size: 19px;
+  line-height: 1.8;
 }
 
-.news a{
-    color:#1565c0;
-    font-weight:bold;
-    text-decoration:none;
+.news p {
+  color: #555;
+  line-height: 1.9;
 }
 
-.message{
-    background:white;
-    padding:25px;
-    text-align:center;
-    border-radius:10px;
-    margin-bottom:20px;
+.news a {
+  color: #1565c0;
+  font-weight: bold;
+  text-decoration: none;
 }
 
-footer{
-    text-align:center;
-    padding:20px;
-    color:#777;
+.message {
+  background: white;
+  padding: 25px;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
 }
 </style>
 </head>
@@ -132,29 +134,29 @@ footer{
 <body>
 
 <header>
-    <h1>📰 اخبار روز</h1>
-    <p>آخرین اخبار ایران و جهان</p>
+  <h1>📰 اخبار روز</h1>
+  <p>آخرین اخبار ایران و جهان</p>
 </header>
 
 <nav id="nav">
-    <button class="active" data-category="all">همه</button>
-    <button data-category="iran">ایران</button>
-    <button data-category="world">جهان</button>
-    <button data-category="sport">ورزش</button>
-    <button data-category="tech">فناوری</button>
+  <button class="active" data-category="all">همه</button>
+  <button data-category="iran">ایران</button>
+  <button data-category="world">جهان</button>
+  <button data-category="sport">ورزش</button>
+  <button data-category="tech">فناوری</button>
 </nav>
 
 <div class="search">
-    <input id="searchInput" type="text" placeholder="جستجوی خبر...">
-    <button id="searchButton">جستجو</button>
+  <input id="searchInput" type="text" placeholder="جستجوی خبر...">
+  <button id="searchButton">جستجو</button>
 </div>
 
 <div id="newsList">
-    <div class="message">در حال دریافت اخبار...</div>
+  <div class="message">در حال دریافت اخبار...</div>
 </div>
 
 <footer>
-    اخبار روز
+  اخبار روز
 </footer>
 
 <script>
@@ -165,191 +167,191 @@ const searchButton = document.getElementById("searchButton");
 
 let allNews = [];
 
-const rss =
-"https://en.mehrnews.com/rss/tp/575";
+const rss = "https://en.mehrnews.com/rss/tp/575";
 
 const api =
-"https://api.rss2json.com/v1/api.json?rss_url=" +
-encodeURIComponent(rss);
+  "https://api.rss2json.com/v1/api.json?rss_url=" +
+  encodeURIComponent(rss);
 
-async function loadNews(){
+async function loadNews() {
 
-    newsList.innerHTML =
+  newsList.innerHTML =
     '<div class="message">در حال دریافت اخبار...</div>';
 
-    try{
+  try {
 
-        const response = await fetch(api);
+    const response = await fetch(api);
 
-        if(!response.ok){
-            throw new Error("خطا در اتصال");
-        }
-
-        const data = await response.json();
-
-        if(!data.items || data.items.length === 0){
-            throw new Error("خبری دریافت نشد");
-        }
-
-        allNews = data.items;
-
-        showNews(allNews);
-
-    }catch(error){
-
-        newsList.innerHTML =
-        '<div class="message">❌ دریافت اخبار انجام نشد.<br><br>لطفاً اتصال اینترنت را بررسی کنید.</div>';
-
-        console.error(error);
+    if (!response.ok) {
+      throw new Error("خطا در اتصال");
     }
+
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) {
+      throw new Error("خبری دریافت نشد");
+    }
+
+    allNews = data.items;
+
+    showNews(allNews);
+
+  } catch (error) {
+
+    newsList.innerHTML =
+      '<div class="message">❌ دریافت اخبار انجام نشد.<br><br>لطفاً اتصال اینترنت را بررسی کنید.</div>';
+
+    console.error(error);
+  }
+}function cleanText(text) {
+
+  if (!text) {
+    return "برای مشاهده جزئیات خبر روی «ادامه خبر» کلیک کنید.";
+  }
+
+  const div = document.createElement("div");
+  div.innerHTML = text;
+
+  let result = div.textContent  div.innerText  "";
+
+  result = result.trim();
+
+  if (result.length > 250) {
+    result = result.substring(0, 250) + "...";
+  }
+
+  return result;
 }
 
-function cleanText(text){
+function showNews(news) {
 
-    if(!text){
-        return "برای مشاهده جزئیات خبر روی ادامه خبر کلیک کنید.";
-    }
+  if (!news || news.length === 0) {
 
-    const div = document.createElement("div");
+    newsList.innerHTML =
+      '<div class="message">خبری پیدا نشد.</div>';
 
-    div.innerHTML = text;
+    return;
+  }
 
-    let result = div.textContent || div.innerText || "";
+  newsList.innerHTML = "";
 
-    result = result.trim();
+  news.slice(0, 20).forEach(item => {
 
-    if(result.length > 250){
-        result = result.substring(0,250) + "...";
-    }
+    const article = document.createElement("article");
+    article.className = "news";
 
-    return result;
+    const title = item.title || "بدون عنوان";
+    const description = cleanText(item.description);
+    const link = item.link || "#";
+
+    article.innerHTML = 
+      <h2>${title}</h2>
+      <p>${description}</p>
+      <a href="${link}" target="_blank" rel="noopener noreferrer">
+        ادامه خبر ←
+      </a>
+    ;
+
+    newsList.appendChild(article);
+  });
 }
 
-function showNews(news){
+function searchNews() {
 
-    if(!news || news.length === 0){
-
-        newsList.innerHTML =
-        '<div class="message">خبری پیدا نشد.</div>';
-
-        return;
-    }
-
-    newsList.innerHTML = "";
-news.slice(0,20).forEach(item => {
-
-        const article = document.createElement("article");
-
-        article.className = "news";
-
-        const title =
-        item.title || "بدون عنوان";
-
-        const description =
-        cleanText(item.description);
-
-        const link =
-        item.link || "#";
-
-        article.innerHTML = `
-            <h2>${title}</h2>
-            <p>${description}</p>
-            <a href="${link}" target="_blank" rel="noopener noreferrer">
-                ادامه خبر ←
-            </a>
-        `;
-
-        newsList.appendChild(article);
-    });
-}
-
-function searchNews(){
-
-    const text =
+  const text =
     searchInput.value.trim().toLowerCase();
 
-    if(!text){
-        showNews(allNews);
-        return;
-    }
+  if (!text) {
+    showNews(allNews);
+    return;
+  }
 
-    const result = allNews.filter(item => {
+  const result = allNews.filter(item => {
 
-        const title =
-        (item.title || "").toLowerCase();
+    const title =
+      (item.title || "").toLowerCase();
 
-        const description =
-        (item.description || "").toLowerCase();
+    const description =
+      (item.description || "").toLowerCase();
 
-        return title.includes(text) ||
-               description.includes(text);
-    });
+    return (
+      title.includes(text) ||
+      description.includes(text)
+    );
+  });
 
-    showNews(result);
+  showNews(result);
 }
 
 searchButton.addEventListener("click", searchNews);
 
-searchInput.addEventListener("keydown", function(event){
+searchInput.addEventListener("keydown", function(event) {
 
-    if(event.key === "Enter"){
-        searchNews();
-    }
+  if (event.key === "Enter") {
+    searchNews();
+  }
 
 });
 
 document.querySelectorAll("#nav button").forEach(button => {
 
-    button.addEventListener("click", function(){
+  button.addEventListener("click", function() {
 
-        document
-        .querySelectorAll("#nav button")
-        .forEach(btn => btn.classList.remove("active"));
+    document
+      .querySelectorAll("#nav button")
+      .forEach(btn => {
+        btn.classList.remove("active");
+      });
 
-        this.classList.add("active");
+    this.classList.add("active");
 
-        const category =
-        this.dataset.category;
+    const category = this.dataset.category;
 
-        if(category === "all"){
-            showNews(allNews);
-            return;
-        }
+    if (category === "all") {
+      showNews(allNews);
+      return;
+    }
 
-        const filtered =
-        allNews.filter(item => {
+    const filtered = allNews.filter(item => {
 
-            const text =
-            (
-                (item.title || "") +
-                " " +
-                (item.description || "")
-            ).toLowerCase();
+      const text =
+        (
+          (item.title || "") +
+          " " +
+          (item.description || "")
+        ).toLowerCase();
 
-            if(category === "iran"){
-                return text.includes("ایران") ||
-                       text.includes("تهران");
-            }
+      if (category === "iran") {
+        return (
+          text.includes("ایران") ||
+          text.includes("تهران")
+        );
+      }
 
-            if(category === "world"){
-                return !text.includes("ایران");
-            }
+      if (category === "world") {
+        return !text.includes("ایران");
+      }
 
-            if(category === "sport"){
-                return text.includes("ورزش") ||
-                       text.includes("فوتبال");
-            }
+      if (category === "sport") {
+        return (
+          text.includes("ورزش") ||
+          text.includes("فوتبال")
+        );
+      }
 
-            if(category === "tech"){
-                return text.includes("فناوری") ||
-                       text.includes("تکنولوژی");
-            }
+      if (category === "tech") {
+        return (
+          text.includes("فناوری") ||
+          text.includes("تکنولوژی")
+        );
+      }
 
-            return true;
-        });
-
-        showNews(filtered);
+      return true;
     });
+
+    showNews(filtered);
+  });
+
 });
 
 loadNews();
