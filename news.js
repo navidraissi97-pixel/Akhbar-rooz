@@ -1,4 +1,4 @@
-async function loadNews() {
+..async function loadNews() {
   const dataBox = document.querySelector(".data");
 
   if (!dataBox) return;
@@ -6,6 +6,7 @@ async function loadNews() {
   dataBox.innerHTML = "<p>در حال دریافت اخبار...</p>";
 
   const rss = "https://en.mehrnews.com/rss/tp/575";
+
   const url =
     "https://api.rss2json.com/v1/api.json?rss_url=" +
     encodeURIComponent(rss);
@@ -38,6 +39,7 @@ async function loadNews() {
 
   } catch (error) {
     console.error(error);
+
     dataBox.innerHTML =
       "<p>خطا در دریافت اخبار. دوباره تلاش کنید.</p>";
   }
