@@ -1,170 +1,515 @@
-<!DOCTYPE html><html lang="fa" dir="rtl">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="description" content="آخرین اخبار ایران و جهان">
-  <title>اخبار روز | آخرین اخبار ایران و جهان</title>  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description"
+content="اخبار روز؛ آخرین اخبار ایران و جهان، ورزش و فناوری">
+
+<title>اخبار روز | آخرین اخبار ایران و جهان</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    background:#f1f3f6;
+    color:#222;
+}
+
+header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+header h1{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+header p{
+    font-size:15px;
+    opacity:.9;
+}
+
+nav{
+    background:white;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+nav button{
+    border:0;
+    background:#eeeeee;
+    padding:10px 17px;
+    border-radius:20px;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:14px;
+}
+
+nav button:hover,
+nav button.active{
+    background:#1976d2;
+    color:white;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px 15px;
+}
+
+.title{
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:18px;
+    border-right:5px solid #1976d2;
+    padding-right:10px;
+}
+
+.news-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+}
+
+.news-card{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.news-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 18px rgba(0,0,0,.13);
+}
+
+.news-card h2{
+    font-size:18px;
+    line-height:1.8;
+    margin-bottom:10px;
+}
+
+.news-card p{
+    color:#555;
+    line-height:1.9;
+    font-size:14px;
+    margin-bottom:12px;
+}
+
+.date{
+    color:#888;
+    font-size:12px;
+    margin-bottom:14px;
+}
+
+.read-more{
+    display:inline-block;
+    background:#1976d2;
+    color:white;
+    text-decoration:none;
+    padding:8px 15px;
+    border-radius:7px;
+    font-size:13px;
+}
+
+.read-more:hover{
+    background:#0d47a1;
+}
+
+.message{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    color:#666;
+}
+
+.loading{
+    text-align:center;
+    padding:30px;
+    font-size:16px;
+}
+
+footer{
+    margin-top:30px;
+    background:#222;
+    color:#ddd;
+    text-align:center;
+    padding:20px;
+    font-size:13px;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
     }
 
-    body {
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f2f4f7;
-      color: #222;
+    nav{
+        overflow-x:auto;
+        justify-content:flex-start;
     }
 
-    header {
-      background: #c62828;
-      color: white;
-      padding: 20px;
-      text-align: center;
+    nav button{
+        white-space:nowrap;
     }
 
-    header h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
+}
 
-    header p {
-      font-size: 14px;
-    }
+</style>
+</head>
 
-    nav {
-      background: #333;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      flex-wrap: wrap;
-    }
+<body>
 
-    nav button {
-      border: none;
-      background: #555;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: inherit;
-    }
+<header>
 
-    nav button:hover {
-      background: #c62828;
-    }
+<h1>📰 اخبار روز</h1>
 
-    .container {
-      width: 94%;
-      max-width: 1100px;
-      margin: 25px auto;
-    }
+<p>آخرین اخبار ایران و جهان</p>
 
-    .title {
-      background: white;
-      padding: 15px;
-      border-right: 5px solid #c62828;
-      margin-bottom: 15px;
-      font-size: 21px;
-      font-weight: bold;
-    }
+</header>
 
-    .news-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-    }
 
-    .news-card {
-      background: white;
-      border-radius: 10px;
-      padding: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+<nav>
 
-    .news-card h2 {
-      color: #c62828;
-      font-size: 18px;
-      line-height: 1.8;
-      margin-bottom: 10px;
-    }
+<button class="active" onclick="loadNews('all',this)">
+همه اخبار
+</button>
 
-    .news-card p {
-      color: #555;
-      line-height: 1.9;
-      font-size: 14px;
-    }
+<button onclick="loadNews('iran',this)">
+ایران
+</button>
 
-    .date {
-      color: #888;
-      font-size: 12px;
-      margin-top: 12px;
-    }
+<button onclick="loadNews('world',this)">
+جهان
+</button>
 
-    .read-more {
-      display: inline-block;
-      margin-top: 12px;
-      background: #c62828;
-      color: white;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      font-size: 13px;
-    }
+<button onclick="loadNews('sport',this)">
+ورزش
+</button>
 
-    footer {
-      margin-top: 40px;
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 13px;
-    }
-  </style></head><body>  <header>
-    <h1>📰 اخبار روز</h1>
-    <p>آخرین اخبار ایران و جهان</p>
-  </header>  <nav>
-    <button>همه اخبار</button>
-    <button>ایران</button>
-    <button>جهان</button>
-    <button>ورزش</button>
-    <button>فناوری</button>
-  </nav>  <main class="container"><div class="title">
-  آخرین اخبار
+<button onclick="loadNews('tech',this)">
+فناوری
+</button>
+
+</nav>
+
+
+<main class="container">
+
+<div class="title">
+آخرین اخبار
 </div>
 
-<section class="news-list">
+<section id="newsList" class="news-list">
 
-  <article class="news-card">
-    <h2>خبر آزمایشی اول</h2>
-    <p>
-      این یک خبر آزمایشی است تا مطمئن شویم صفحه سایت به‌درستی نمایش داده می‌شود.
-    </p>
-    <div class="date">۱۴۰۵/۰۶/۰۷</div>
-    <a href="#" class="read-more">ادامه خبر</a>
-  </article>
-
-  <article class="news-card">
-    <h2>خبر آزمایشی دوم</h2>
-    <p>
-      در مرحله بعدی می‌توانیم اخبار واقعی را به این قسمت متصل کنیم.
-    </p>
-    <div class="date">۱۴۰۵/۰۶/۰۷</div>
-    <a href="#" class="read-more">ادامه خبر</a>
-  </article>
-
-  <article class="news-card">
-    <h2>اخبار فناوری</h2>
-    <p>
-      این بخش برای نمایش اخبار فناوری و جدیدترین مطالب تکنولوژی آماده شده است.
-    </p>
-    <div class="date">۱۴۰۵/۰۶/۰۷</div>
-    <a href="#" class="read-more">ادامه خبر</a>
-  </article>
+<div class="loading">
+⏳ در حال دریافت آخرین اخبار...
+</div>
 
 </section>
 
-  </main>  <footer>
-    © 2026 اخبار روز — تمامی حقوق محفوظ است.
-  </footer></body>
+</main>
+
+
+<footer>
+
+© 2026 اخبار روز — تمامی حقوق محفوظ است.
+
+</footer>
+
+
+<script>
+
+const feeds = {
+
+    iran:
+    "https://www.mehrnews.com/rss",
+
+    world:
+    "https://www.theguardian.com/world/rss",
+
+    sport:
+    "https://www.theguardian.com/sport/rss",
+
+    tech:
+    "https://www.theguardian.com/technology/rss"
+
+};
+
+
+async function getRSS(rssUrl){
+
+    const api =
+    "https://api.rss2json.com/v1/api.json?rss_url="
+    + encodeURIComponent(rssUrl);
+
+    const response = await fetch(api);
+
+    if(!response.ok){
+        throw new Error("خطا در دریافت اخبار");
+    }
+
+    const data = await response.json();
+
+    if(data.status !== "ok"){
+        throw new Error("RSS قابل دریافت نیست");
+    }
+
+    return data.items || [];
+}
+
+
+async function loadNews(category="all",button=null){
+
+    const newsList =
+    document.getElementById("newsList");
+
+    if(button){
+
+        document.querySelectorAll("nav button")
+        .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+    }
+
+    newsList.innerHTML =
+    '<div class="loading">⏳ در حال دریافت آخرین اخبار...</div>';
+
+
+    try{
+
+        let allItems = [];
+
+
+        if(category === "all"){
+
+            const results = await Promise.allSettled([
+
+                getRSS(feeds.iran),
+                getRSS(feeds.world),
+                getRSS(feeds.sport),
+                getRSS(feeds.tech)
+
+            ]);
+
+            results.forEach(result => {
+
+                if(result.status === "fulfilled"){
+                    allItems = allItems.concat(result.value);
+                }
+
+            });
+
+        }else{
+
+            allItems = await getRSS(feeds[category]);
+
+        }
+
+
+        if(allItems.length === 0){
+
+            newsList.innerHTML =
+            '<div class="message">❌ خبری پیدا نشد.</div>';
+
+            return;
+
+        }
+
+
+        // حذف خبرهای تکراری
+        const unique = [];
+
+        const titles = new Set();
+
+        allItems.forEach(item => {
+
+            if(
+                item.title &&
+                !titles.has(item.title)
+            ){
+
+                titles.add(item.title);
+                unique.push(item);
+
+            }
+
+        });
+
+
+        // مرتب‌سازی جدیدترین خبرها
+        unique.sort((a,b) => {
+
+            return new Date(b.pubDate) -
+                   new Date(a.pubDate);
+
+        });
+
+
+        newsList.innerHTML = "";
+
+
+        unique.slice(0,30).forEach(item => {
+
+            const article =
+            document.createElement("article");
+
+            article.className =
+            "news-card";
+
+
+            const title =
+            document.createElement("h2");
+
+            title.textContent =
+            item.title || "بدون عنوان";
+
+
+            const description =
+            document.createElement("p");
+
+            description.textContent =
+            cleanText(item.description) ||
+            "برای مشاهده جزئیات خبر روی ادامه خبر کلیک کنید.";
+
+
+            const date =
+            document.createElement("div");
+
+            date.className = "date";
+
+            date.textContent =
+            formatDate(item.pubDate);
+
+
+            const link =
+            document.createElement("a");
+
+            link.className =
+            "read-more";
+
+            link.href =
+            item.link || "#";
+
+            link.target = "_blank";
+
+            link.rel = "noopener noreferrer";
+
+            link.textContent =
+            "ادامه خبر";
+
+
+            article.appendChild(title);
+
+            article.appendChild(description);
+
+            article.appendChild(date);
+
+            article.appendChild(link);
+
+            newsList.appendChild(article);
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        newsList.innerHTML = `
+
+        <div class="message">
+
+        ❌ دریافت اخبار انجام نشد.
+
+        <br><br>
+
+        لطفاً چند لحظه بعد دوباره امتحان کنید.
+
+        </div>
+
+        `;
+
+    }
+
+}
+
+
+function cleanText(text){
+
+    if(!text) return "";
+
+    const div =
+    document.createElement("div");
+
+    div.innerHTML = text;
+
+    return div.textContent
+        .replace(/\s+/g," ")
+        .trim()
+        .substring(0,220);
+
+}
+
+
+function formatDate(date){
+
+    if(!date) return "";
+
+    const d =
+    new Date(date);
+
+    if(isNaN(d)) return date;
+
+    return d.toLocaleDateString(
+        "fa-IR",
+        {
+            year:"numeric",
+            month:"2-digit",
+            day:"2-digit"
+        }
+    );
+
+}
+
+
+// دریافت خودکار هنگام باز شدن سایت
+loadNews();
+
+
+// به‌روزرسانی خودکار هر 10 دقیقه
+setInterval(function(){
+
+    const active =
+    document.querySelector("nav button.active");
+
+    loadNews();
+
+},600000);
+
+</script>
+
+</body>
+
 </html>
