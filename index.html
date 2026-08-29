@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
-<head>
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="description"
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description"
 content="اخبار روز؛ آخرین اخبار ایران و جهان، ورزش و فناوری">
 
-<title>اخبار روز | آخرین اخبار ایران و جهان</title>
-
-<style>
+<title>اخبار روز | آخرین اخبار ایران و جهان</title><style>
 
 *{
     box-sizing:border-box;
@@ -28,7 +21,7 @@ header{
     background:linear-gradient(135deg,#0d47a1,#1976d2);
     color:white;
     text-align:center;
-    padding:25px 15px;
+    padding:28px 15px;
 }
 
 header h1{
@@ -61,6 +54,7 @@ nav button{
     cursor:pointer;
     font-family:inherit;
     font-size:14px;
+    transition:.2s;
 }
 
 nav button:hover,
@@ -91,15 +85,27 @@ nav button.active{
 
 .news-card{
     background:white;
-    border-radius:12px;
-    padding:18px;
+    border-radius:14px;
+    overflow:hidden;
     box-shadow:0 3px 12px rgba(0,0,0,.08);
-    transition:.2s;
+    transition:.25s;
 }
 
 .news-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 6px 18px rgba(0,0,0,.13);
+    transform:translateY(-4px);
+    box-shadow:0 8px 22px rgba(0,0,0,.15);
+}
+
+.news-image{
+    width:100%;
+    height:210px;
+    object-fit:cover;
+    display:block;
+    background:#ddd;
+}
+
+.news-content{
+    padding:18px;
 }
 
 .news-card h2{
@@ -126,7 +132,7 @@ nav button.active{
     background:#1976d2;
     color:white;
     text-decoration:none;
-    padding:8px 15px;
+    padding:9px 16px;
     border-radius:7px;
     font-size:13px;
 }
@@ -141,12 +147,14 @@ nav button.active{
     border-radius:10px;
     text-align:center;
     color:#666;
+    grid-column:1/-1;
 }
 
 .loading{
     text-align:center;
     padding:30px;
     font-size:16px;
+    grid-column:1/-1;
 }
 
 footer{
@@ -173,72 +181,42 @@ footer{
         white-space:nowrap;
     }
 
+    .container{
+        padding:15px 10px;
+    }
+
+    .news-list{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .news-image{
+        height:200px;
+    }
+
+    .news-card h2{
+        font-size:17px;
+    }
+
 }
 
-</style>
-</head>
-
-<body>
-
-<header>
-
-<h1>📰 اخبار روز</h1>
-
-<p>آخرین اخبار ایران و جهان</p>
-
-</header>
-
-
-<nav>
-
-<button class="active" onclick="loadNews('all',this)">
+</style></head><body><header><h1>📰 اخبار روز</h1><p>آخرین اخبار ایران و جهان | ورزش | فناوری</p></header><nav><button class="active" onclick="loadNews('all',this)">
 همه اخبار
-</button>
-
-<button onclick="loadNews('iran',this)">
-ایران
-</button>
-
-<button onclick="loadNews('world',this)">
-جهان
-</button>
-
-<button onclick="loadNews('sport',this)">
-ورزش
-</button>
-
-<button onclick="loadNews('tech',this)">
-فناوری
-</button>
-
-</nav>
-
-
-<main class="container">
-
-<div class="title">
+</button><button onclick="loadNews('iran',this)">
+🇮🇷 ایران
+</button><button onclick="loadNews('world',this)">
+🌍 جهان
+</button><button onclick="loadNews('sport',this)">
+⚽ ورزش
+</button><button onclick="loadNews('tech',this)">
+💻 فناوری
+</button></nav><main class="container"><div class="title">
 آخرین اخبار
-</div>
-
-<section id="newsList" class="news-list">
-
-<div class="loading">
+</div><section id="newsList" class="news-list"><div class="loading">
 ⏳ در حال دریافت آخرین اخبار...
-</div>
+</div></section></main><footer>© 2026 اخبار روز — تمامی حقوق محفوظ است.
 
-</section>
-
-</main>
-
-
-<footer>
-
-© 2026 اخبار روز — تمامی حقوق محفوظ است.
-
-</footer>
-
-
-<script>
+</footer><script>
 
 const feeds = {
 
@@ -263,19 +241,22 @@ async function getRSS(rssUrl){
     "https://api.rss2json.com/v1/api.json?rss_url="
     + encodeURIComponent(rssUrl);
 
-    const response = await fetch(api);
+    const response =
+    await fetch(api);
 
     if(!response.ok){
         throw new Error("خطا در دریافت اخبار");
     }
 
-    const data = await response.json();
+    const data =
+    await response.json();
 
     if(data.status !== "ok"){
         throw new Error("RSS قابل دریافت نیست");
     }
 
     return data.items || [];
+
 }
 
 
@@ -284,14 +265,19 @@ async function loadNews(category="all",button=null){
     const newsList =
     document.getElementById("newsList");
 
+
     if(button){
 
-        document.querySelectorAll("nav button")
-        .forEach(btn => btn.classList.remove("active"));
+        document
+        .querySelectorAll("nav button")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
 
         button.classList.add("active");
 
     }
+
 
     newsList.innerHTML =
     '<div class="loading">⏳ در حال دریافت آخرین اخبار...</div>';
@@ -304,7 +290,8 @@ async function loadNews(category="all",button=null){
 
         if(category === "all"){
 
-            const results = await Promise.allSettled([
+            const results =
+            await Promise.allSettled([
 
                 getRSS(feeds.iran),
                 getRSS(feeds.world),
@@ -313,17 +300,23 @@ async function loadNews(category="all",button=null){
 
             ]);
 
+
             results.forEach(result => {
 
                 if(result.status === "fulfilled"){
-                    allItems = allItems.concat(result.value);
+
+                    allItems =
+                    allItems.concat(result.value);
+
                 }
 
             });
 
-        }else{
+        }
+        else{
 
-            allItems = await getRSS(feeds[category]);
+            allItems =
+            await getRSS(feeds[category]);
 
         }
 
@@ -338,10 +331,13 @@ async function loadNews(category="all",button=null){
         }
 
 
-        // حذف خبرهای تکراری
+        /* حذف خبرهای تکراری */
+
         const unique = [];
 
-        const titles = new Set();
+        const titles =
+        new Set();
+
 
         allItems.forEach(item => {
 
@@ -351,6 +347,7 @@ async function loadNews(category="all",button=null){
             ){
 
                 titles.add(item.title);
+
                 unique.push(item);
 
             }
@@ -358,7 +355,8 @@ async function loadNews(category="all",button=null){
         });
 
 
-        // مرتب‌سازی جدیدترین خبرها
+        /* مرتب‌سازی جدیدترین خبرها */
+
         unique.sort((a,b) => {
 
             return new Date(b.pubDate) -
@@ -379,12 +377,91 @@ async function loadNews(category="all",button=null){
             "news-card";
 
 
+            /* پیدا کردن عکس خبر */
+
+            let imageUrl = "";
+
+
+            if(item.thumbnail){
+
+                imageUrl =
+                item.thumbnail;
+
+            }
+            else if(
+                item.enclosure &&
+                item.enclosure.link
+            ){
+
+                imageUrl =
+                item.enclosure.link;
+
+            }
+            else if(
+                item.enclosure &&
+                item.enclosure.url
+            ){
+
+                imageUrl =
+                item.enclosure.url;
+
+            }
+
+
+            /* عکس */
+
+            if(imageUrl){
+
+                const image =
+                document.createElement("img");
+
+                image.className =
+                "news-image";
+
+                image.src =
+                imageUrl;
+
+                image.alt =
+                item.title || "تصویر خبر";
+
+                image.loading =
+                "lazy";
+
+
+                image.onerror =
+                function(){
+
+                    this.style.display =
+                    "none";
+
+                };
+
+
+                article.appendChild(image);
+
+            }
+
+
+            /* محتوای کارت */
+
+            const content =
+            document.createElement("div");
+
+            content.className =
+            "news-content";
+
+
+            /* تیتر */
+
             const title =
             document.createElement("h2");
 
             title.textContent =
-            item.title || "بدون عنوان";
+            item.title ||
+            "بدون عنوان";
 
+
+            /* توضیح */
 
             const description =
             document.createElement("p");
@@ -394,14 +471,19 @@ async function loadNews(category="all",button=null){
             "برای مشاهده جزئیات خبر روی ادامه خبر کلیک کنید.";
 
 
+            /* تاریخ */
+
             const date =
             document.createElement("div");
 
-            date.className = "date";
+            date.className =
+            "date";
 
             date.textContent =
             formatDate(item.pubDate);
 
+
+            /* لینک */
 
             const link =
             document.createElement("a");
@@ -412,30 +494,37 @@ async function loadNews(category="all",button=null){
             link.href =
             item.link || "#";
 
-            link.target = "_blank";
+            link.target =
+            "_blank";
 
-            link.rel = "noopener noreferrer";
+            link.rel =
+            "noopener noreferrer";
 
             link.textContent =
             "ادامه خبر";
 
 
-            article.appendChild(title);
+            content.appendChild(title);
 
-            article.appendChild(description);
+            content.appendChild(description);
 
-            article.appendChild(date);
+            content.appendChild(date);
 
-            article.appendChild(link);
+            content.appendChild(link);
+
+
+            article.appendChild(content);
 
             newsList.appendChild(article);
 
         });
 
 
-    }catch(error){
+    }
+    catch(error){
 
         console.error(error);
+
 
         newsList.innerHTML = `
 
@@ -456,14 +545,21 @@ async function loadNews(category="all",button=null){
 }
 
 
+/* تمیز کردن متن خبر */
+
 function cleanText(text){
 
-    if(!text) return "";
+    if(!text)
+        return "";
+
 
     const div =
     document.createElement("div");
 
-    div.innerHTML = text;
+
+    div.innerHTML =
+    text;
+
 
     return div.textContent
         .replace(/\s+/g," ")
@@ -473,14 +569,21 @@ function cleanText(text){
 }
 
 
+/* نمایش تاریخ فارسی */
+
 function formatDate(date){
 
-    if(!date) return "";
+    if(!date)
+        return "";
+
 
     const d =
     new Date(date);
 
-    if(isNaN(d)) return date;
+
+    if(isNaN(d))
+        return date;
+
 
     return d.toLocaleDateString(
         "fa-IR",
@@ -494,22 +597,17 @@ function formatDate(date){
 }
 
 
-// دریافت خودکار هنگام باز شدن سایت
+/* دریافت اخبار هنگام باز شدن سایت */
+
 loadNews();
 
 
-// به‌روزرسانی خودکار هر 10 دقیقه
-setInterval(function(){
+/* بروزرسانی خودکار هر 10 دقیقه */
 
-    const active =
-    document.querySelector("nav button.active");
+setInterval(function(){
 
     loadNews();
 
 },600000);
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>
